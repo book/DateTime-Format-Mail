@@ -1,6 +1,8 @@
 DateTime::Format::Mail
 
+
    Convert between DateTime and RFC2822/822 formats
+
 
 For installation details, see INSTALL.
 
@@ -8,8 +10,10 @@ For usage, see the doco. Either use perldoc or view it
 on the web at:
     <http://search.cpan.org/author/SPOON/DateTime-Format-Mail/>
 
-Changes for 0.26 (16 Jul 2003)
-   - Uses the spiffy new Locale system.
+Changes for 0.27 (1 Aug 2003)
+   - Made strict mode stricter.
+   - Advertised loose mode more loudly.
+
 
 For a complete list of changes, see the Changes file.
 

@@ -1,15 +1,15 @@
 use ExtUtils::MakeMaker;
 WriteMakefile(
-    NAME		=> 'DateTime::Format::Mail',
-    VERSION_FROM	=> 'lib/DateTime/Format/Mail.pm',
+    NAME                => 'DateTime::Format::Mail',
+    VERSION_FROM        => 'lib/DateTime/Format/Mail.pm',
     PREREQ_PM => {
-		'DateTime' => '0.14',
-		'Params::Validate' => '0.64',
-		'Test::More' => '0.47',
-	    },
+                'DateTime' => '0.1501',
+                'Params::Validate' => '0.64',
+                'Test::More' => '0.47',
+            },
     ($] >= 5.005 ?
       (ABSTRACT_FROM => 'lib/DateTime/Format/Mail.pm',
       AUTHOR     => 'Iain Truskett <spoon@cpan.org>') : ()),
     ( eval($ExtUtils::MakeMaker::VERSION) >= 6.10 ?
-	( NO_META => 1, ) : ()),
+        ( NO_META => 1, ) : ()),
 );

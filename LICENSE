@@ -1,4 +1,4 @@
-LICENSE FOR DateTime::Format::Mail 0.26
+LICENSE FOR DateTime::Format::Mail 0.27
 
 Copyright © Iain Truskett, 2003. All rights reserved.
 
@@ -6,6 +6,9 @@ This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
 The full text of the licenses can be found in the Artistic and
-COPYING files included with this module.
+COPYING files included with this module, or in perlartistic and
+perlgpl in Perl 5.8.1 or later.
 
-See the supplied 'Artistic' and 'COPYING' files for the respective licenses.
+See the supplied 'Artistic' and 'COPYING' files, or
+perlartistic and perlgpl in Perl 5.8.1 or later, for
+the respective licenses.
