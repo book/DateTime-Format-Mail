@@ -14,7 +14,7 @@ use DateTime 0.08;
 use Params::Validate qw( validate SCALAR );
 use vars qw( $VERSION );
 
-$VERSION = '0.26';
+$VERSION = '0.27';
 
 =head1 SYNOPSIS
 
@@ -54,6 +54,95 @@ $VERSION = '0.26';
 RFC2822 introduces a slightly different format of date than that
 used by RFC822. The main correction is that the format is more
 limited, and thus easier to parse.
+
+Despite the ease of generating and parsing perfectly valid RFC822 and
+RFC2822 people still get it wrong. So this module provides three things
+for those handling mail dates:
+
+=over 4
+
+=item 1
+
+A strict parser, so you can see where you're right.
+
+=item 2
+
+A strict formatter, so you can generate the right stuff
+to begin with.
+
+=cut
+
+# Timezones for strict parser.
+my %timezones = qw(
+    EDT -0400	EST -0500	CDT -0500	CST -0600
+    MDT -0600	MST -0700	PDT -0700	PST -0800
+    GMT +0000	UT  +0000
+);
+my $tz_RE = join( '|', sort keys %timezones );
+$tz_RE= qr/(?:$tz_RE)/;
+$timezones{UTC} = $timezones{UT};
+
+# Strict parser regex
+my $strict_RE = qr{
+    ^ \s* # optional 
+    # [day-of-week "," ]
+    (?:Mon|Tue|Wed|Thu|Fri|Sat|Sun) ,
+    # date => day month year
+    \s+
+    (\d{1,2})  # day => 1*2DIGIT
+    \s+
+    (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) # month-name
+    \s*
+    ((?:\d\d)?\d\d) # year
+    # FWS
+    \s+
+    # time
+    (\d\d):(\d\d):(\d\d) # time
+    (?:
+        \s+ (
+            [+-] \d{4}	# standard form
+            | $tz_RE	# obsolete form (mostly ignored)
+            | [A-IK-Za-ik-z]  # including military (no 'J')
+            ) # time zone (optional)
+    )?
+    \s* $
+}ox;
+
+=item 3
+
+A I<loose> parser, so you can take the misbegotten output
+from other programs and turn it into something useful.
+
+=back
+
+=cut
+
+# Loose parser regex
+my $loose_RE = qr{
+    ^ \s* # optional 
+    (?i: (?:Mon|Tue|Wed|Thu|Fri|Sat|Sun|[A-Z][a-z][a-z]) ,?)? # Day name + comma
+        # (empirically optional)
+    \s*
+    (\d{1,2})  # day of month
+    [-\s]*
+    (?i: (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) ) # month
+    [-\s]*
+    ((?:\d\d)?\d\d) # year
+    \s+
+    (\d?\d):(\d?\d) (?: :(\d?\d) )? # time
+    (?:
+        \s+ "? (
+            [+-] \d{4}	# standard form
+            | [A-Z]+	# obsolete form (mostly ignored)
+            | GMT [+-] \d+	# empirical (converted)
+            | [A-Z]+\d+	# bizarre empirical (ignored)
+            | [a-zA-Z/]+	# linux style (ignored)
+            | [+-]{0,2} \d{3,5}	# corrupted standard form
+            ) "? # time zone (optional)
+    )?
+        (?: \s+ \([^\)]+\) )? # (friendly tz name; empirical)
+    \s* \.? $
+}x;
 
 =head1 CONSTRUCTORS
 
@@ -181,26 +270,7 @@ sub _parse_strict
     my $date = shift;
 
     # Wed, 12 Mar 2003 13:05:00 +1100
-    my @parsed = $date =~ m!
-	^ \s* # optional 
-	(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun) , # Day name + comma
-	   # (empirically optional)
-	\s*
-	(\d{1,2})  # day of month
-	\s*
-	(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) # month
-	\s*
-	((?:\d\d)?\d\d) # year
-	\s+
-	(\d\d):(\d\d):(\d\d) # time
-	(?:
-	    \s+ (
-		[+-] \d{4}	# standard form
-		| [A-Z]+	# obsolete form (mostly ignored)
-		) # time zone (optional)
-	)?
-	\s* $
-    !x;
+    my @parsed = $date =~ $strict_RE;
     croak "Invalid format for date!" unless @parsed;
     my %when;
     @when{qw( day month year hour minute second time_zone)} = @parsed;
@@ -213,31 +283,7 @@ sub _parse_loose
     my $date = shift;
 
     # Wed, 12 Mar 2003 13:05:00 +1100
-    my @parsed = $date =~ m!
-	^ \s* # optional 
-	(?i: (?:Mon|Tue|Wed|Thu|Fri|Sat|Sun|[A-Z][a-z][a-z]) ,?)? # Day name + comma
-	   # (empirically optional)
-	\s*
-	(\d{1,2})  # day of month
-	[-\s]*
-	(?i: (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) ) # month
-	[-\s]*
-	((?:\d\d)?\d\d) # year
-	\s+
-	(\d?\d):(\d?\d) (?: :(\d?\d) )? # time
-	(?:
-	    \s+ "? (
-		[+-] \d{4}	# standard form
-		| [A-Z]+	# obsolete form (mostly ignored)
-		| GMT [+-] \d+	# empirical (converted)
-		| [A-Z]+\d+	# bizarre empirical (ignored)
-		| [a-zA-Z/]+	# linux style (ignored)
-		| [+-]{0,2} \d{3,5}	# corrupted standard form
-		) "? # time zone (optional)
-	)?
-	    (?: \s+ \([^\)]+\) )? # (friendly tz name; empirical)
-	\s* \.? $
-    !x;
+    my @parsed = $date =~ $loose_RE;
     croak "Invalid format for date!" unless @parsed;
     my %when;
     @when{qw( day month year hour minute second time_zone)} = @parsed;
@@ -270,36 +316,28 @@ sub parse_datetime
     return $date_time;
 }
 
+sub determine_timezone
 {
-    my %timezones = qw(
-	EDT -0400	EST -0500	CDT -0500	CST -0600
-	MDT -0600	MST -0700	PDT -0700	PST -0800
-	GMT +0000	UTC +0000
-    );
+    my $self = shift;
 
-    sub determine_timezone
-    {
-	my $self = shift;
+    my $tz = shift;
+    return '-0000' unless defined $tz; # return quickly if nothing needed
+    return $tz if $tz =~ /^[+-]\d{4}$/;
 
-	my $tz = shift;
-	return '-0000' unless defined $tz; # return quickly if nothing needed
-	return $tz if $tz =~ /^[+-]\d{4}$/;
+    $tz =~ s/ ^ [+-] (?=[+-]) //x; # for when there are two signs
 
-	$tz =~ s/ ^ [+-] (?=[+-]) //x; # for when there are two signs
-
-	if (exists $timezones{$tz}) {
-	    $tz = $timezones{$tz};
-	} elsif (substr($tz, 0, 3) eq 'GMT' and length($tz)  > 4) {
-	    $tz = sprintf "%5.5s", substr($tz,3)."0000";
-	} elsif ( $tz =~ /^ ([+-]?) (\d+) $/x) {
-	    my $p = $1||'+';
-	    $tz = sprintf "%s%04d", $p, $2;
-	} else {
-	    $tz = "-0000";
-	}
-
-	return $tz;
+    if (exists $timezones{$tz}) {
+        $tz = $timezones{$tz};
+    } elsif (substr($tz, 0, 3) eq 'GMT' and length($tz)  > 4) {
+        $tz = sprintf "%5.5s", substr($tz,3)."0000";
+    } elsif ( $tz =~ /^ ([+-]?) (\d+) $/x) {
+        my $p = $1||'+';
+        $tz = sprintf "%s%04d", $p, $2;
+    } else {
+        $tz = "-0000";
     }
+
+    return $tz;
 }
 
 =head2 set_year_cutoff
@@ -422,7 +460,8 @@ This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
 The full text of the licenses can be found in the F<Artistic> and
-F<COPYING> files included with this module.
+F<COPYING> files included with this module, or in L<perlartistic> and
+L<perlgpl> in Perl 5.8.1 or later.
 
 =head1 AUTHOR
 
