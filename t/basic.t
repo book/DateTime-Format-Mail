@@ -11,7 +11,7 @@ my $class = 'DateTime::Format::Mail';
 # Does new() work properly?
 {
     eval { $class->new('fnar') };
-    ok( ($@ and $@ =~ /takes no param/), "Too many parameters exception" );
+    ok( ($@ and $@ =~ /^Odd number/), "Odd number of args spotted." );
 
     my $obj = eval { $class->new() };
     ok( !$@, "Created object" );
