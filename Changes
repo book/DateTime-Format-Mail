@@ -5,6 +5,10 @@ version: 0.24
 date:    8 Apr 2003
 changes:
     - Minor documentation fixes.
+    - Refactored year and timezone repair functions.
+    - Added tests for said functions.
+    - Added ability to parse multiple sign timezones.
+    - GMT and UTC are recognised as timezone names.
 
 ---
 version: 0.23

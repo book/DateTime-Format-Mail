@@ -14,7 +14,7 @@ use DateTime 0.08;
 use Params::Validate qw( validate SCALAR );
 use vars qw( $VERSION );
 
-$VERSION = '0.23';
+$VERSION = '0.24';
 
 =head1 SYNOPSIS
 
@@ -79,6 +79,8 @@ else either don't specify it or give it a false value.
 
 =back
 
+    my $loose = DateTime::Format::Mail->new( loose => 1 );
+
 =cut
 
 my $set_parse_method = sub {
@@ -98,7 +100,8 @@ sub new
 {
     my $class = shift;
     my %args = validate( @_, {
-	    loose => { type => SCALAR, default => 0 }
+	    loose => { type => SCALAR, default => 0 },
+	    year_cutoff => { type => SCALAR, default => 60 },
 	});
 
     my $self = bless {}, ref($class)||$class;
@@ -106,10 +109,12 @@ sub new
     {
 	# If called on an object, clone
 	$self->$set_parse_method( $self->$get_parse_method );
+	$self->set_year_cutoff( $self->year_cutoff );
 	# but as we have nothing to clone...
 	# and that's it. we don't store that much info per object
     }
     $self->loose() if $args{loose};
+    $self->set_year_cutoff( $args{year_cutoff} ) if $args{year_cutoff};
 
     $self;
 }
@@ -130,7 +135,7 @@ sub clone
     return $self->new();
 }
 
-=head1 CLASS/OBJECT METHODS
+=head1 PARSING METHODS
 
 These methods work on either our objects or as class methods.
 
@@ -157,7 +162,6 @@ sub strict
     my $self = shift;
     return $self->$set_parse_method( '_parse_strict' );
 }
-
 
 =head2 parse_datetime
 
@@ -226,7 +230,7 @@ sub _parse_loose
 		| GMT [+-] \d+	# empirical (converted)
 		| [A-Z]+\d+	# bizarre empirical (ignored)
 		| [a-zA-Z/]+	# linux style (ignored)
-		| [+-]? \d{3,5}	# corrupted standard form
+		| [+-]{0,2} \d{3,5}	# corrupted standard form
 		) "? # time zone (optional)
 	)?
 	    (?: \s+ \([^\)]+\) )? # (friendly tz name; empirical)
@@ -256,34 +260,101 @@ sub parse_datetime
     };
     $when{month} = $months{$when{month}} or croak "Invalid month [$when{month}].";
 
-    for ($when{year})
-    {
-	$_ += $_ > 60 ? 1900 : 2000 if length() < 4;
-    }
-
-    my %timezones = qw(
-	EDT -0400	EST -0500	CDT -0500	CST -0600
-	MDT -0600	MST -0700	PDT -0700	PST -0800
-    );
-
-    for ($when{time_zone})
-    {
-	if (exists $timezones{$_}) {
-	    $_ = $timezones{$_};
-	} elsif (substr($_, 0, 3) eq 'GMT' and length()  > 4) {
-	    $_ = sprintf "%5.5s", substr($_,3)."0000";
-	} elsif ( /^ (?![+-]\d{4}) ([+-]?) (\d+) $/) {
-	    my $p = $1||'+';
-	    $_ = sprintf "%s%04d", $p, $2;
-	} elsif (length() == 1 or !/^ [-+] \d{4} $/x ) {
-	    $_ = "-0000";
-	}
-    }
+    $when{year} = $self->fix_year( $when{year} );
+    $when{time_zone} = $self->determine_timezone( $when{time_zone} );
 
     my $date_time = DateTime->new( %when );
 
     return $date_time;
 }
+
+{
+    my %timezones = qw(
+	EDT -0400	EST -0500	CDT -0500	CST -0600
+	MDT -0600	MST -0700	PDT -0700	PST -0800
+	GMT +0000	UTC +0000
+    );
+
+    sub determine_timezone
+    {
+	my $self = shift;
+
+	my $tz = shift;
+	return $tz if /^[+-]\d{4}$/; # return quickly if nothing needed
+
+	$tz =~ s/ ^ [+-] (?=[+-]) //x; # for when there are two signs
+
+	if (exists $timezones{$tz}) {
+	    $tz = $timezones{$tz};
+	} elsif (substr($tz, 0, 3) eq 'GMT' and length($tz)  > 4) {
+	    $tz = sprintf "%5.5s", substr($tz,3)."0000";
+	} elsif ( $tz =~ /^ ([+-]?) (\d+) $/x) {
+	    my $p = $1||'+';
+	    $tz = sprintf "%s%04d", $p, $2;
+	} else {
+	    $tz = "-0000";
+	}
+
+	return $tz;
+    }
+}
+
+=head2 set_year_cutoff
+
+Two digit years are treated as valid in the loose translation and are
+translated up to a 19xx or 20xx figure. By default, if the year is 
+greater than '60', it's treated as being in the 20th century (19xx).
+If lower, or equal, then the 21st (20xx).
+
+set_year_cutoff() allows you to modify this behaviour by specifying
+a different cutoff, where the default is 60.
+
+The return value is the object itself.
+
+=cut
+
+sub set_year_cutoff
+{
+    my $self = shift;
+    croak "Calling object method as class method!" unless ref $self;
+    croak "Wrong number of arguments (should be 1) to set_year_cutoff"
+	unless @_ == 1;
+    my $cutoff = shift;
+    $self->{year_cutoff} = $cutoff;
+    return $self;
+}
+
+=head2 year_cutoff
+
+Returns the current cutoff. Can be used as either a class or object method.
+
+=cut
+
+sub year_cutoff
+{
+    my $self = shift;
+    croak "Too many arguments (should be 0) to year_cutoff" if @_;
+    (ref $self and $self->{year_cutoff}) or 60;
+}
+
+=head2 fix_year
+
+Takes a year and returns it normalized.
+
+=cut
+
+sub fix_year
+{
+    my $self = shift;
+    my $year = shift;
+    return $year if length $year >= 4; # Return quickly if we can
+
+    my $cutoff = $self->year_cutoff;
+    $year += $year > $cutoff ? 1900 : 2000;
+    return $year;
+}
+
+=head1 FORMATTING METHODS
 
 =head2 format_datetime
 
@@ -323,6 +394,9 @@ __END__
 =head1 THANKS
 
 Dave Rolsky (DROLSKY) for kickstarting the DateTime project.
+
+Roderick A. Anderson for noting where the documentation was incomplete
+in places.
 
 =head1 SUPPORT
 

@@ -1,6 +1,6 @@
 # $Id$
 use strict;
-use Test::More tests => 29;
+use Test::More tests => 24;
 use warnings FATAL => 'all';
 
 BEGIN {
@@ -23,21 +23,16 @@ Fri, 11 Mar 83 07:19:39 GTB Standart Saati
 Fri, 18 Oct 02 11:19:41 Eastern Daylight Time
 Fri, 20 Dec 2002 17:05:41 +0100 (West-Europa (standaardtijd))
 lun, 20 ene 2003 04:25:57
-Mon, 10 Mar 2003 19:18:54 +-0700
-Mon, 10 Mar 2003 19:19:12 +-0700
 Mon, 11 Nov 2002 18:03:25 +50578934
 Mon, 24 Feb 03 05:20:51 Central Standard Time
 Mon, 24 Feb 03 13:40:52 Central Standard Time
 Sunday , 23 Feb 2003 05:38:27 PM
-Thu, 1 Aug 2002 10:55:0 +-0800
 Thu, 20 Feb 2003 14:10:12 PST -0800
-Thu, 30 Jan 2003 21:02:18 --0500
 Thu, Jul 6 2000 15:13:49 GMT-0400
 Thu, Jul 6 2000 15:23:41 GMT-0400
 Tue, 18 Jun 102 11:37:08 EDT
 Tue, 18 Jun 102 13:12:32 EDT
 Tue, 24 Sep 2002 00:56:10 +1:0
-Tue, 4 Mar 2003 0:12:7 +-0800
 Tue, Jul 11 2000 19:05:28 GMT-0400
 Tue, Jul 11 2000 19:24:48 GMT-0400
 Tuesday, January 14, 2003  9:35 AM
