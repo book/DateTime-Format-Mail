@@ -1,0 +1,23 @@
+AUTHORS
+Artistic
+COPYING
+CREDITS
+ChangeLog
+Changes
+INSTALL
+LICENSE
+MANIFEST			This list of files
+MANIFEST.SKIP
+META.yml
+Makefile.PL
+README
+SIGNATURE
+lib/DateTime/Format/Mail.pm
+t/00pod.t
+t/00signature.t
+t/basic.t
+t/format.t
+t/invalid.t
+t/parse.t
+t/sample.t
+t/sample_dates
