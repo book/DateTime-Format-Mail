@@ -1,6 +1,13 @@
 # Change log for DateTime::Format::Mail
 
 ---
+version: 0.25
+date:    3 Jun 2003
+changes:
+    - Backported to 5.005_03
+    - Fixed TZ bug.
+
+---
 version: 0.24
 date:    8 Apr 2003
 changes:

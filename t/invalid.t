@@ -1,7 +1,6 @@
 # $Id$
 use strict;
 use Test::More tests => 24;
-use warnings FATAL => 'all';
 
 BEGIN {
     use_ok 'DateTime::Format::Mail';
@@ -9,11 +8,18 @@ BEGIN {
 
 my $f = DateTime::Format::Mail->new->loose;
 
+$SIG{__WARN__} = sub { die };
+
 while (<DATA>)
 {
     chomp;
     my $p = eval { $f->parse_datetime( $_ ) };
-    ok( not(defined $p and ref $p and not $@), "Could not parse invalid date: $_" );
+    ok(
+        (
+            !(defined $p and ref $p and not $@)
+                and ( $@ =~ /^Invalid format / )
+        ),
+        "Could not parse invalid date: $_" );
 }
 
 pass("Didn't crash and burn!")

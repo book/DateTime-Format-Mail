@@ -15,18 +15,21 @@ my $f = $class->new()->loose();
 chdir 't' if -d 't';
 my $tests = my $ok = 0;
 
-open my $dates, '<', 'sample_dates' or die "Cannot open date samples: $!";
-while (<$dates>)
 {
-    chomp;
-    my $p = eval { $f->parse_datetime( $_ ) };
-    if (defined $p and ref $p and not $@) {
-	$ok++;
-    } else {
-	diag "Could not parse $_";
+    local *DATES;
+    open DATES, '< sample_dates' or die "Cannot open date samples: $!";
+    while (<DATES>)
+    {
+	chomp;
+	my $p = eval { $f->parse_datetime( $_ ) };
+	if (defined $p and ref $p and not $@) {
+	    $ok++;
+	} else {
+	    diag "Could not parse $_";
+	}
+	$tests++;
     }
-    $tests++;
+    close DATES;
 }
-close $dates;
 
 ok($ok == $tests, "Sample date tests.");

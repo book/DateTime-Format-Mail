@@ -1,5 +1,4 @@
 use strict;
-use warnings;
 use Test::More tests => 13;
 use vars qw( $class );
 BEGIN {

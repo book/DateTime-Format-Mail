@@ -14,7 +14,7 @@ use DateTime 0.08;
 use Params::Validate qw( validate SCALAR );
 use vars qw( $VERSION );
 
-$VERSION = '0.24';
+$VERSION = '0.25';
 
 =head1 SYNOPSIS
 
@@ -83,18 +83,20 @@ else either don't specify it or give it a false value.
 
 =cut
 
-my $set_parse_method = sub {
+sub _set_parse_method
+{
     my $self = shift;
     croak "Calling object method as class method!" unless ref $self;
     $self->{parser_method} = shift;
     return $self;
-};
+}
 
-my $get_parse_method = sub {
+sub _get_parse_method
+{
     my $self = shift;
     my $method = ref($self) ? $self->{parser_method} : '';
     $method ||= '_parse_strict';
-};
+}
 
 sub new
 {
@@ -108,7 +110,7 @@ sub new
     if (ref $class)
     {
 	# If called on an object, clone
-	$self->$set_parse_method( $self->$get_parse_method );
+	$self->_set_parse_method( $self->_get_parse_method );
 	$self->set_year_cutoff( $self->year_cutoff );
 	# but as we have nothing to clone...
 	# and that's it. we don't store that much info per object
@@ -154,13 +156,13 @@ These methods set the parsing strictness.
 sub loose
 {
     my $self = shift;
-    return $self->$set_parse_method( '_parse_loose' );
+    return $self->_set_parse_method( '_parse_loose' );
 }
 
 sub strict
 {
     my $self = shift;
-    return $self->$set_parse_method( '_parse_strict' );
+    return $self->_set_parse_method( '_parse_strict' );
 }
 
 =head2 parse_datetime
@@ -251,7 +253,7 @@ sub parse_datetime
     my $date = shift;
 
     # Wed, 12 Mar 2003 13:05:00 +1100
-    my $method = $self->$get_parse_method();
+    my $method = $self->_get_parse_method();
     my %when = %{ $self->$method($date) };
     $when{time_zone} ||= '-0000';
 
@@ -280,7 +282,8 @@ sub parse_datetime
 	my $self = shift;
 
 	my $tz = shift;
-	return $tz if /^[+-]\d{4}$/; # return quickly if nothing needed
+	return '-0000' unless defined $tz; # return quickly if nothing needed
+	return $tz if $tz =~ /^[+-]\d{4}$/;
 
 	$tz =~ s/ ^ [+-] (?=[+-]) //x; # for when there are two signs
 
