@@ -1,6 +1,13 @@
 # Change log for DateTime::Format::Mail
 
 ---
+version: 0.27
+date:    1 Aug 2003
+changes:
+    - Made strict mode stricter.
+    - Advertised loose mode more loudly.
+
+---
 version: 0.26
 date:    16 Jul 2003
 changes:
