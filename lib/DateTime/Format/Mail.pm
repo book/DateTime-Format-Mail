@@ -4,7 +4,7 @@ package DateTime::Format::Mail;
 use strict;
 use 5.005;
 use Carp;
-use DateTime 0.08;
+use DateTime 0.17;
 use Params::Validate qw( validate validate_pos SCALAR );
 use vars qw( $VERSION );
 
@@ -127,13 +127,16 @@ sub new
     if (ref $class)
     {
         # If called on an object, clone
-        $self->_set_parse_method( $self->_get_parse_method );
-        $self->set_year_cutoff( $self->year_cutoff );
-        # but as we have nothing to clone...
-        # and that's it. we don't store that much info per object
+        $self->_set_parse_method( $class->_get_parse_method );
+        $self->set_year_cutoff( $class->year_cutoff );
+        # and that's it. we don't store much info per object
     }
-    $self->loose() if $args{loose};
-    $self->set_year_cutoff( $args{year_cutoff} ) if $args{year_cutoff};
+    else
+    {
+        my $parser = $args{loose} ? "loose" : "strict";
+        $self->$parser();
+        $self->set_year_cutoff( $args{year_cutoff} ) if $args{year_cutoff};
+    }
 
     $self;
 }
@@ -148,12 +151,14 @@ sub clone
 sub loose
 {
     my $self = shift;
+    croak "loose() takes no arguments!" if @_;
     return $self->_set_parse_method( '_parse_loose' );
 }
 
 sub strict
 {
     my $self = shift;
+    croak "loose() takes no arguments!" if @_;
     return $self->_set_parse_method( '_parse_strict' );
 }
 
