@@ -17,7 +17,15 @@ my $tests = my $ok = 0;
 
 {
     local *DATES;
-    open DATES, '< sample_dates' or die "Cannot open date samples: $!";
+
+    # Smart open since 5.008 will need to do a raw read rather
+    # than interpret the data as anything other than bytes.
+    do { if ( $] >= 5.008 ) {
+        open DATES, '<:raw', 'sample_dates';
+    } else {
+        open DATES, '< sample_dates';
+    } } or die "Cannot open date samples: $!";
+
     while (<DATES>)
     {
 	chomp;
