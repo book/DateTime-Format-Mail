@@ -1,6 +1,14 @@
 # Change log for DateTime::Format::Mail
 
 ---
+version: 0.29
+date:    22 Oct 2003
+changes:
+    - Corrected an error message.
+    - Added some more error checking.
+    - Added some more method examples.
+
+---
 version: 0.28
 date:    21 Oct 2003
 changes:
