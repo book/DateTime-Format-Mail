@@ -1,12 +1,6 @@
 package DateTime::Format::Mail;
 # $Id$
 
-=head1 NAME
-
-DateTime::Format::Mail - Convert between DateTime and RFC2822/822 formats
-
-=cut
-
 use strict;
 use 5.005;
 use Carp;
@@ -15,62 +9,6 @@ use Params::Validate qw( validate SCALAR );
 use vars qw( $VERSION );
 
 $VERSION = '0.27';
-
-=head1 SYNOPSIS
-
-    use DateTime::Format::Mail;
-
-    # From RFC2822 via class method:
-
-    my $datetime = DateTime::Format::Mail->parse_datetime(
-	"Sat, 29 Mar 2003 22:11:18 -0800"
-    );
-    print $datetime->ymd('.'); # "2003.03.29"
-
-    #  or via an object
-    
-    my $pf = DateTime::Format::Mail->new();
-    print $pf->parse_datetime(
-	"Fri, 23 Nov 2001 21:57:24 -0600"
-    )->ymd; # "2001-11-23"
-
-    # Back to RFC2822 date
-    
-    use DateTime;
-    my $dt = DateTime->new(
-	year => 1979, month => 7, day => 16,
-	hour => 16, minute => 45, second => 20,
-	time_zone => "Australia/Sydney"
-    );
-    my $str = DateTime::Format::Mail->format_datetime( $dt );
-    print $str; # "Mon, 16 Jul 1979 16:45:20 +1000"
-
-    # or via an object
-    $str = $pf->format_datetime( $dt );
-    print $str; # "Mon, 16 Jul 1979 16:45:20 +1000"
-
-=head1 DESCRIPTION
-
-RFC2822 introduces a slightly different format of date than that
-used by RFC822. The main correction is that the format is more
-limited, and thus easier to parse.
-
-Despite the ease of generating and parsing perfectly valid RFC822 and
-RFC2822 people still get it wrong. So this module provides three things
-for those handling mail dates:
-
-=over 4
-
-=item 1
-
-A strict parser, so you can see where you're right.
-
-=item 2
-
-A strict formatter, so you can generate the right stuff
-to begin with.
-
-=cut
 
 # Timezones for strict parser.
 my %timezones = qw(
@@ -108,15 +46,6 @@ my $strict_RE = qr{
     \s* $
 }ox;
 
-=item 3
-
-A I<loose> parser, so you can take the misbegotten output
-from other programs and turn it into something useful.
-
-=back
-
-=cut
-
 # Loose parser regex
 my $loose_RE = qr{
     ^ \s* # optional 
@@ -143,34 +72,6 @@ my $loose_RE = qr{
         (?: \s+ \([^\)]+\) )? # (friendly tz name; empirical)
     \s* \.? $
 }x;
-
-=head1 CONSTRUCTORS
-
-=head2 new
-
-Creates a new DateTime::Format::Mail instance. This is generally
-not required for simple operations. If you wish to use a different
-parsing style from the default then you'll need to create an object.
-
-   my $parser = DateTime::Format::Mail->new()
-   my $copy = $parser->new();
-
-If called on an existing object then it clones the object.
-
-It has one, optional, parameter.
-
-=over 4
-
-=item *
-
-C<loose> should be a true value if you want a loose parser,
-else either don't specify it or give it a false value.
-
-=back
-
-    my $loose = DateTime::Format::Mail->new( loose => 1 );
-
-=cut
 
 sub _set_parse_method
 {
@@ -210,37 +111,12 @@ sub new
     $self;
 }
 
-=head2 clone
-
-For those who prefer to explicitly clone via a method called C<clone()>.
-If called as a class method it will die.
-
-   my $clone = $original->clone();
-
-=cut
-
 sub clone
 {
     my $self = shift;
     croak "Calling object method as class method!" unless ref $self;
     return $self->new();
 }
-
-=head1 PARSING METHODS
-
-These methods work on either our objects or as class methods.
-
-=head2 loose, strict
-
-These methods set the parsing strictness.
-
-    my $parser = DateTime::Format::Mail->new;
-    $parser->loose;
-    $parser->strict; # (the default)
-
-    my $p = DateTime::Format::Mail->new->loose;
-
-=cut
 
 sub loose
 {
@@ -253,16 +129,6 @@ sub strict
     my $self = shift;
     return $self->_set_parse_method( '_parse_strict' );
 }
-
-=head2 parse_datetime
-
-Given an RFC2822 or 822 datetime string, return a C<DateTime> object
-representing that date and time. Unparseable strings will cause
-the method to die.
-
-See the L<synopsis|/SYNOPSIS> for examples.
-
-=cut
 
 sub _parse_strict
 {
@@ -340,6 +206,171 @@ sub determine_timezone
     return $tz;
 }
 
+sub set_year_cutoff
+{
+    my $self = shift;
+    croak "Calling object method as class method!" unless ref $self;
+    croak "Wrong number of arguments (should be 1) to set_year_cutoff"
+	unless @_ == 1;
+    my $cutoff = shift;
+    $self->{year_cutoff} = $cutoff;
+    return $self;
+}
+
+sub year_cutoff
+{
+    my $self = shift;
+    croak "Too many arguments (should be 0) to year_cutoff" if @_;
+    (ref $self and $self->{year_cutoff}) or 60;
+}
+
+sub fix_year
+{
+    my $self = shift;
+    my $year = shift;
+    return $year if length $year >= 4; # Return quickly if we can
+
+    my $cutoff = $self->year_cutoff;
+    $year += $year > $cutoff ? 1900 : 2000;
+    return $year;
+}
+
+sub format_datetime
+{
+    my $self = shift;
+    croak "No DateTime object specified." unless @_;
+    my $dt = $_[0]->clone;
+    $dt->set( locale => 'en_US' );
+
+    my $rv = $dt->strftime( "%a, %d %b %Y %H:%M:%S %z" );
+    $rv =~ s/\+0000$/-0000/;
+    $rv;
+}
+
+1;
+
+__END__
+
+=head1 NAME
+
+DateTime::Format::Mail - Convert between DateTime and RFC2822/822 formats
+
+=head1 SYNOPSIS
+
+    use DateTime::Format::Mail;
+
+    # From RFC2822 via class method:
+
+    my $datetime = DateTime::Format::Mail->parse_datetime(
+	"Sat, 29 Mar 2003 22:11:18 -0800"
+    );
+    print $datetime->ymd('.'); # "2003.03.29"
+
+    #  or via an object
+    
+    my $pf = DateTime::Format::Mail->new();
+    print $pf->parse_datetime(
+	"Fri, 23 Nov 2001 21:57:24 -0600"
+    )->ymd; # "2001-11-23"
+
+    # Back to RFC2822 date
+    
+    use DateTime;
+    my $dt = DateTime->new(
+	year => 1979, month => 7, day => 16,
+	hour => 16, minute => 45, second => 20,
+	time_zone => "Australia/Sydney"
+    );
+    my $str = DateTime::Format::Mail->format_datetime( $dt );
+    print $str; # "Mon, 16 Jul 1979 16:45:20 +1000"
+
+    # or via an object
+    $str = $pf->format_datetime( $dt );
+    print $str; # "Mon, 16 Jul 1979 16:45:20 +1000"
+
+=head1 DESCRIPTION
+
+RFC2822 introduces a slightly different format of date than that
+used by RFC822. The main correction is that the format is more
+limited, and thus easier to parse.
+
+Despite the ease of generating and parsing perfectly valid RFC822 and
+RFC2822 people still get it wrong. So this module provides three things
+for those handling mail dates:
+
+=over 4
+
+=item 1
+
+A strict parser, so you can see where you're right.
+
+=item 2
+
+A strict formatter, so you can generate the right stuff
+to begin with.
+
+=item 3
+
+A I<loose> parser, so you can take the misbegotten output
+from other programs and turn it into something useful.
+
+=back
+
+=head1 CONSTRUCTORS
+
+=head2 new
+
+Creates a new DateTime::Format::Mail instance. This is generally
+not required for simple operations. If you wish to use a different
+parsing style from the default then you'll need to create an object.
+
+   my $parser = DateTime::Format::Mail->new()
+   my $copy = $parser->new();
+
+If called on an existing object then it clones the object.
+
+It has one, optional, parameter.
+
+=over 4
+
+=item *
+
+C<loose> should be a true value if you want a loose parser,
+else either don't specify it or give it a false value.
+
+=back
+
+    my $loose = DateTime::Format::Mail->new( loose => 1 );
+
+=head2 clone
+
+For those who prefer to explicitly clone via a method called C<clone()>.
+If called as a class method it will die.
+
+   my $clone = $original->clone();
+
+=head1 PARSING METHODS
+
+These methods work on either our objects or as class methods.
+
+=head2 loose, strict
+
+These methods set the parsing strictness.
+
+    my $parser = DateTime::Format::Mail->new;
+    $parser->loose;
+    $parser->strict; # (the default)
+
+    my $p = DateTime::Format::Mail->new->loose;
+
+=head2 parse_datetime
+
+Given an RFC2822 or 822 datetime string, return a C<DateTime> object
+representing that date and time. Unparseable strings will cause
+the method to die.
+
+See the L<synopsis|/SYNOPSIS> for examples.
+
 =head2 set_year_cutoff
 
 Two digit years are treated as valid in the loose translation and are
@@ -352,48 +383,13 @@ a different cutoff, where the default is 60.
 
 The return value is the object itself.
 
-=cut
-
-sub set_year_cutoff
-{
-    my $self = shift;
-    croak "Calling object method as class method!" unless ref $self;
-    croak "Wrong number of arguments (should be 1) to set_year_cutoff"
-	unless @_ == 1;
-    my $cutoff = shift;
-    $self->{year_cutoff} = $cutoff;
-    return $self;
-}
-
 =head2 year_cutoff
 
 Returns the current cutoff. Can be used as either a class or object method.
 
-=cut
-
-sub year_cutoff
-{
-    my $self = shift;
-    croak "Too many arguments (should be 0) to year_cutoff" if @_;
-    (ref $self and $self->{year_cutoff}) or 60;
-}
-
 =head2 fix_year
 
 Takes a year and returns it normalized.
-
-=cut
-
-sub fix_year
-{
-    my $self = shift;
-    my $year = shift;
-    return $year if length $year >= 4; # Return quickly if we can
-
-    my $cutoff = $self->year_cutoff;
-    $year += $year > $cutoff ? 1900 : 2000;
-    return $year;
-}
 
 =head1 FORMATTING METHODS
 
@@ -413,24 +409,6 @@ Given a C<DateTime> object, return it as an RFC2822 compliant string.
     my $formatter = DateTime::Format::Mail->new();
     my $rfcdate = $formatter->format_datetime( $dt );
     print $rfcdate, "\n";
-
-=cut
-
-sub format_datetime
-{
-    my $self = shift;
-    croak "No DateTime object specified." unless @_;
-    my $dt = $_[0]->clone;
-    $dt->set( locale => 'en_US' );
-
-    my $rv = $dt->strftime( "%a, %d %b %Y %H:%M:%S %z" );
-    $rv =~ s/\+0000$/-0000/;
-    $rv;
-}
-
-1;
-
-__END__
 
 =head1 THANKS
 
