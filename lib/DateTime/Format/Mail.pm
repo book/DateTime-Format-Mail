@@ -158,7 +158,7 @@ sub loose
 sub strict
 {
     my $self = shift;
-    croak "loose() takes no arguments!" if @_;
+    croak "strict() takes no arguments!" if @_;
     return $self->_set_parse_method( '_parse_strict' );
 }
 
