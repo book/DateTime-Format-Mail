@@ -383,7 +383,7 @@ sub format_datetime
     my $self = shift;
     croak "No DateTime object specified." unless @_;
     my $dt = $_[0]->clone;
-    $dt->set( language => 'en-us' );
+    $dt->set( locale => 'en_US' );
 
     my $rv = $dt->strftime( "%a, %d %b %Y %H:%M:%S %z" );
     $rv =~ s/\+0000$/-0000/;
