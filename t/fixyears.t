@@ -1,5 +1,5 @@
 use strict;
-use Test::More tests => 18;
+use Test::More tests => 20;
 use vars qw( $class );
 BEGIN {
     $class = 'DateTime::Format::Mail';
@@ -41,6 +41,10 @@ sub run_our_tests
 	    '70' => '1970',
 	    '90' => '1990',
 	},
+        default => {
+            '49' => '2049',
+            '50' => '1950',
+        },
     );
     run_our_tests( $fn => \%testsuite );
 }
@@ -50,7 +54,7 @@ sub run_our_tests
 {
     my $parser = $class->new();
     isa_ok( $parser => $class );
-    is( $parser->year_cutoff => 60, "Default is default." );
+    is( $parser->year_cutoff => 49, "Default is default." );
     $parser->set_year_cutoff( 20 );
     is( $parser->year_cutoff => 20, "Default overriden." );
 }

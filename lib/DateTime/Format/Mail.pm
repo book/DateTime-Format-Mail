@@ -93,7 +93,7 @@ sub new
     my $class = shift;
     my %args = validate( @_, {
 	    loose => { type => SCALAR, default => 0 },
-	    year_cutoff => { type => SCALAR, default => 60 },
+	    year_cutoff => { type => SCALAR, default => $class->default_cutoff },
 	});
 
     my $self = bless {}, ref($class)||$class;
@@ -217,11 +217,23 @@ sub set_year_cutoff
     return $self;
 }
 
+# rfc2822, 4.3. Obsolete Date and Time
+#   Where a two or three digit year occurs in a date, the year is to be
+#   interpreted as follows: If a two digit year is encountered whose
+#   value is between 00 and 49, the year is interpreted by adding 2000,
+#   ending up with a value between 2000 and 2049.  If a two digit year is
+#   encountered with a value between 50 and 99, or any three digit year
+#   is encountered, the year is interpreted by adding 1900.
+sub default_cutoff
+{
+    49;
+}
+
 sub year_cutoff
 {
     my $self = shift;
     croak "Too many arguments (should be 0) to year_cutoff" if @_;
-    (ref $self and $self->{year_cutoff}) or 60;
+    (ref $self and $self->{year_cutoff}) or $self->default_cutoff;
 }
 
 sub fix_year
@@ -375,11 +387,12 @@ See the L<synopsis|/SYNOPSIS> for examples.
 
 Two digit years are treated as valid in the loose translation and are
 translated up to a 19xx or 20xx figure. By default, if the year is 
-greater than '60', it's treated as being in the 20th century (19xx).
+greater than '49', it's treated as being in the 20th century (19xx).
 If lower, or equal, then the 21st (20xx).
 
 set_year_cutoff() allows you to modify this behaviour by specifying
-a different cutoff, where the default is 60.
+a different cutoff, where the default is 49, as per RFC2822. This means
+50 is interpreted as 1950 while 49 is 2049.
 
 The return value is the object itself.
 
