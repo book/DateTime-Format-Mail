@@ -8,8 +8,12 @@ For usage, see the doco. Either use perldoc or view it
 on the web at:
     <http://search.cpan.org/author/SPOON/DateTime-Format-Mail/>
 
-Changes for 0.23 (30 Mar 2003)
-   - Initial version.
+Changes for 0.24 (8 Apr 2003)
+   - Minor documentation fixes.
+   - Refactored year and timezone repair functions.
+   - Added tests for said functions.
+   - Added ability to parse multiple sign timezones.
+   - GMT and UTC are recognised as timezone names.
 
 For a complete list of changes, see the Changes file.
 

@@ -1,6 +1,9 @@
-CREDITS FOR DateTime::Format::Mail 0.23
+CREDITS FOR DateTime::Format::Mail 0.24
 
 Dave Rolsky (DROLSKY) for kickstarting the DateTime project.
+
+Roderick A. Anderson for noting where the documentation was incomplete
+in places.
 
 
 

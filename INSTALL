@@ -38,19 +38,19 @@ DateTime::Format::Mail is distributed as a gzipped tar archive file:
 
     DateTime-Format-Mail-<version>.tar.gz
 
-where <version> represents the current version number, e.g. 0.23.
+where <version> represents the current version number, e.g. 0.24.
 
 To install the module, unpack the distribution archive to
 create an installation directory.  Something like this:
 
-    tar zxf DateTime-Format-Mail-0.23.tar.gz
+    tar zxf DateTime-Format-Mail-0.24.tar.gz
 or
-    gunzip DateTime-Format-Mail-0.23.tar.gz
-    tar xf DateTime-Format-Mail-0.23.tar
+    gunzip DateTime-Format-Mail-0.24.tar.gz
+    tar xf DateTime-Format-Mail-0.24.tar
 
 You can then 'cd' into the directory created,
 
-    cd DateTime-Format-Mail-0.23
+    cd DateTime-Format-Mail-0.24
 
 
 INSTALLING MANUALLY

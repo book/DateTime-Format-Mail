@@ -1,15 +1,12 @@
---- #YAML:1.0
-build_requires:
-  Test::More: 0.47
-conflicts: {}
-distribution_type: module
-license: perl
-name: DateTime-Format-Mail
-recommends:
-  Test::Pod: 0.95
-  Test::Signature: 1.03
+#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
+name:         DateTime-Format-Mail
+version:      0.24
+version_from: lib/DateTime/Format/Mail.pm
+installdirs:  site
 requires:
-  DateTime: 0.08
-  Params::Validate: 0.57
-version: 0.23
-generated_by: docmaker version 0.89
+    Test::More:                    0.47
+    DateTime:                      0.09
+    Params::Validate:              0.58
+
+distribution_type: module
+generated_by: ExtUtils::MakeMaker version 6.10_02
