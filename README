@@ -8,9 +8,8 @@ For usage, see the doco. Either use perldoc or view it
 on the web at:
     <http://search.cpan.org/author/SPOON/DateTime-Format-Mail/>
 
-Changes for 0.25 (3 Jun 2003)
-   - Backported to 5.005_03
-   - Fixed TZ bug.
+Changes for 0.26 (16 Jul 2003)
+   - Uses the spiffy new Locale system.
 
 For a complete list of changes, see the Changes file.
 

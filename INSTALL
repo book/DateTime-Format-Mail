@@ -20,6 +20,9 @@ CPANPLUS:
     > i DateTime::Format::Mail
     > q
 
+See your local 'perldoc CPAN' or 'perldoc CPANPLUS' for
+instructions on setting up and configuring CPAN or CPANPLUS.
+
 
 OBTAINING THE MODULE
 --------------------
@@ -28,6 +31,7 @@ The latest release version of DateTime::Format::Mail can be downloaded
 from any CPAN site:
 
     http://www.cpan.org/modules/by-authors/id/S/SP/SPOON/
+    http://search.cpan.org/dist/DateTime-Format-Mail/
 
 Interim and development versions may also be available
 from the author's web site:
@@ -38,19 +42,19 @@ DateTime::Format::Mail is distributed as a gzipped tar archive file:
 
     DateTime-Format-Mail-<version>.tar.gz
 
-where <version> represents the current version number, e.g. 0.25.
+where <version> represents the current version number, e.g. 0.26.
 
 To install the module, unpack the distribution archive to
 create an installation directory.  Something like this:
 
-    tar zxf DateTime-Format-Mail-0.25.tar.gz
+    tar zxf DateTime-Format-Mail-0.26.tar.gz
 or
-    gunzip DateTime-Format-Mail-0.25.tar.gz
-    tar xf DateTime-Format-Mail-0.25.tar
+    gunzip DateTime-Format-Mail-0.26.tar.gz
+    tar xf DateTime-Format-Mail-0.26.tar
 
 You can then 'cd' into the directory created,
 
-    cd DateTime-Format-Mail-0.25
+    cd DateTime-Format-Mail-0.26
 
 
 INSTALLING MANUALLY
@@ -65,7 +69,7 @@ That will check each file's integrity, as well as the signature's
 validity, thus verifying the integrity of the entire package.
 If "==> Signature verified OK! <==" is not displayed, the
 distribution may already have been compromised, and you should not run
-its Makefile.PL or Build.PL.
+its Makefile.PL.
 
 Ideally, you should confirm with a third party that the finger print and
 key id by which the signature was signed is indeed the key it is meant
@@ -74,7 +78,7 @@ that's not always possible).
 
 The 'make install' (done later) will install the modules and scripts on
 your system. You may need administrator privileges to perform this task.
-Alternately you can can install the module to a local directory (see
+Alternately you can install the module to a local directory (see
 ExtUtils::MakeMaker for full details), e.g.
 
     % perl Makefile.PL PREFIX=/home/abw/
@@ -89,12 +93,9 @@ If you're not after a custom location, just do:
 
     % perl Makefile.PL
 
-To install this module into a specific directory (if, for example, you
-are a non-root user) instead do:
+If you are lacking any of the prerequisite modules, running that
+program will tell you. All prerequisites are available from CPAN.
 
-    % perl Makefile.PL PREFIX=/name/of/the/directory
-
-Any problems, you may want to go to CPAN to obtain prerequisites.
 When you have them all:
 
     % make && make test
@@ -106,10 +107,10 @@ newsgroups or PerlMonks, so it's no use posting there.
 When you report your trouble, be sure to send me the following
 information;
     + result of `perl -V'
-    + output from 'make test'
+    + output from 'make test' - ideally do 'make test TEST_VERBOSE=1 >& errs'
 
-Send those to bug-DateTime-Format-Mail@rt.cpan.org and I'll get back to you
-as soon as I'm able.
+Send those to bug-DateTime-Format-Mail@rt.cpan.org and I'll get
+back to you as soon as I'm able.
 
 If it worked, then become root and type:
 
@@ -121,9 +122,13 @@ If you have a copy of cpantest installed, type:
 
     % cpantest -g pass -nc -p `basename \`pwd\`` -auto
 
+Or:
+    % cpantest -g pass -nc -p DateTime-Format-Mail-0.26 -auto
+
 That will tell both me and other potential users that the module
 built correctly on your machine.
 
 
 cheers,
 Iain (aka Spoon).
+http://iain.truskett.id.au/

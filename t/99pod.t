@@ -1,5 +1,4 @@
 #!/usr/bin/perl -w
-use lib 'inc';
 use strict;
 use vars qw( @files );
 
@@ -17,6 +16,6 @@ use Test::More tests => scalar @files;
 
 eval "use Test::Pod 0.95";
 SKIP: {
-    skip "Test::Pod 0.95 not installed.", 1 if $@;
+    skip "Test::Pod 0.95 not installed.", scalar @files if $@;
     pod_file_ok( $_ ) for @files;
 }

@@ -1,24 +1,28 @@
 --- #YAML:1.0
-build_requires:
-  File::Find::Rule: 0.10
-  Test::More: 0.47
-conflicts: {}
 distribution_type: module
-license: perl
 name: DateTime-Format-Mail
+version: 0.26
+license: perl
+
+conflicts: {}
+
+build_requires:
+  Test::More: 0.47
 recommends:
+  File::Find::Rule: 0.10
   Test::Pod: 0.95
   Test::Signature: 1.04
 requires:
-  DateTime: 0.12
-  Params::Validate: 0.59
-version: 0.25
+  DateTime: 0.14
+  Params::Validate: 0.64
+
 private:
   directory:
     - t
+
 provides:
   DateTime::Format::Mail:
     file: lib/DateTime/Format/Mail.pm
-    version: 0.25
+    version: 0.26
 
 generated_by: docmaker version 0.89

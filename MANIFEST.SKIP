@@ -4,10 +4,12 @@
 ^Build$
 ^blib/
 ^Makefile$
-^DateTime-Format-Builder-
+^DateTime-Format-Mail-
 ^MANIFEST.bak$
 ^pm_to_blib$
 ^Makefile.[a-z]+$
 .cvsignore$
-diff
-patch
+^diff
+^patch
+\.patch$
+^log$
