@@ -1,7 +1,10 @@
-CREDITS FOR DateTime::Format::Mail 0.27
+CREDITS FOR DateTime::Format::Mail 0.28
 
 Dave Rolsky (DROLSKY) for kickstarting the DateTime project.
 
 Roderick A. Anderson for noting where the documentation was incomplete
 in places.
+
+Joshua Hoblitt (JHOBLITT) for inspiring me to check what the
+standard said about interpreting two digit years.
 

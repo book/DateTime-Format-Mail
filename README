@@ -6,11 +6,14 @@ For installation details, see INSTALL.
 
 For usage, see the doco. Either use perldoc or view it
 on the web at:
-    <http://search.cpan.org/author/SPOON/DateTime-Format-Mail/>
+    <http://search.cpan.org/dist/DateTime-Format-Mail/>
 
-Changes for 0.27 (1 Aug 2003)
-   - Made strict mode stricter.
-   - Advertised loose mode more loudly.
+Changes for 0.28 (21 Oct 2003)
+   - Default cutoff is now 49, as per RFC2822.
+   - Doc shuffling and formatting tweaks.
+   - set_year_cutoff and year_cutoff stricter with
+     arguments.
+   - Cloning fixed, be it from clone() or new().
 
 
 For a complete list of changes, see the Changes file.

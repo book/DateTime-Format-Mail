@@ -10,6 +10,8 @@ Makefile.PL
 MANIFEST
 MANIFEST.SKIP
 META.yml
+notes/rfc2822.txt
+notes/rfc822.txt
 README
 SIGNATURE
 t/00signature.t
