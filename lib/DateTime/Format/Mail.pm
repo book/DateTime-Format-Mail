@@ -5,10 +5,24 @@ use strict;
 use 5.005;
 use Carp;
 use DateTime 0.08;
-use Params::Validate qw( validate SCALAR );
+use Params::Validate qw( validate validate_pos SCALAR );
 use vars qw( $VERSION );
 
 $VERSION = '0.28';
+
+my %validations = (
+    year_cutoff =>  {
+        type => SCALAR,
+        callbacks => {
+            'greater than or equal to zero, less than 100' => sub {
+                defined $_[0]
+                    and $_[0] =~ /^ \d+ $/x 
+                    and $_[0] >= 0
+                    and $_[0] < 100
+            },
+        },
+    }
+);
 
 # Timezones for strict parser.
 my %timezones = qw(
@@ -21,6 +35,10 @@ $tz_RE= qr/(?:$tz_RE)/;
 $timezones{UTC} = $timezones{UT};
 
 # Strict parser regex
+
+# Lovely regex. Mostly a translation of the BNF in 2822.
+# XXX - need more thorough tests to ensure it's *strict*.
+
 my $strict_RE = qr{
     ^ \s* # optional 
     # [day-of-week "," ]
@@ -99,7 +117,7 @@ sub new
                 default => 0,
             },
             year_cutoff => {
-                type => SCALAR,
+                %{ $validations{year_cutoff} },
                 default => $class->default_cutoff,
             },
         }
@@ -220,6 +238,7 @@ sub set_year_cutoff
 {
     my $self = shift;
     croak "Calling object method as class method!" unless ref $self;
+    validate_pos( @_, $validations{year_cutoff} );
     croak "Wrong number of arguments (should be 1) to set_year_cutoff"
         unless @_ == 1;
     my $cutoff = shift;
@@ -312,19 +331,24 @@ DateTime::Format::Mail - Convert between DateTime and RFC2822/822 formats
 
 =head1 DESCRIPTION
 
-RFC2822 introduces a slightly different format of date than that
-used by RFC822. The main correction is that the format is more
-limited, and thus easier to parse.
+RFCs 2822 and 822 specify date formats to be used by email. This
+module parses and emits such dates.
+
+RFC2822 (April 2001) introduces a slightly different format of
+date than that used by RFC822 (August 1982). The main correction
+is that the preferred format is more limited, and thus easier to
+parse programmatically.
 
 Despite the ease of generating and parsing perfectly valid RFC822 and
-RFC2822 people still get it wrong. So this module provides three things
+RFC2822 people still get it wrong. So this module provides four things
 for those handling mail dates:
 
 =over 4
 
 =item 1
 
-A strict parser, so you can see where you're right.
+A strict parser that will only accept RFC2822 dates, so you can
+see where you're right.
 
 =item 2
 
@@ -335,23 +359,40 @@ to begin with.
 
 A I<loose> parser, so you can take the misbegotten output
 from other programs and turn it into something useful.
+This includes various minor errors as well as some somewhat more
+bizarre mistakes. The file F<t/sample_dates> in this module's
+distribution should give you an idea of what's valid, while
+F<t/invalid.t> should do the same for what's not. Those regarded
+as invalid are just a bit B<too> strange to allow.
+
+=item 4
+
+Interoperation with the rest of the L<DateTime> suite. These are
+a collection of modules to handle dates in a modern and accurate
+fashion. In particular, they make it trivial to parse, manipulate
+and then format dates. Shifting timezones is a doddle, and
+converting between formats is a cinch.
 
 =back
+
+As a future direction, I'm contemplating a even stricter
+parser that will only accept dates with no obsolete elements.
 
 =head1 CONSTRUCTORS
 
 =head2 new
 
-Creates a new DateTime::Format::Mail instance. This is generally
-not required for simple operations. If you wish to use a different
-parsing style from the default then you'll need to create an object.
+Creates a new C<DateTime::Format::Mail> instance. This is
+generally not required for simple operations. If you wish to use
+a different parsing style from the default, strict, parser then
+you'll need to create an object.
 
    my $parser = DateTime::Format::Mail->new()
    my $copy = $parser->new();
 
 If called on an existing object then it clones the object.
 
-It has one, optional, parameter.
+It has two optional named parameters.
 
 =over 4
 
@@ -360,9 +401,18 @@ It has one, optional, parameter.
 C<loose> should be a true value if you want a loose parser,
 else either don't specify it or give it a false value.
 
+=item *
+
+C<year_cutoff> should be an integer greater than or equal to zero
+specifying the cutoff year. See L<"set_year_cutoff"> for details.
+
 =back
 
     my $loose = DateTime::Format::Mail->new( loose => 1 );
+
+    my $post_2049 = DateTime::Format::Mail->new(
+        year_cutoff => 60
+    );
 
 =head2 clone
 
@@ -396,19 +446,25 @@ See the L<synopsis|/SYNOPSIS> for examples.
 =head2 set_year_cutoff
 
 Two digit years are treated as valid in the loose translation and are
-translated up to a 19xx or 20xx figure. By default, if the year is 
+translated up to a 19xx or 20xx figure. By default, following the
+specification of RFC2822, if the year is 
 greater than '49', it's treated as being in the 20th century (19xx).
-If lower, or equal, then the 21st (20xx).
+If lower, or equal, then the 21st (20xx). That is, 50 becomes
+1950 while 49 is 2049.
 
-set_year_cutoff() allows you to modify this behaviour by specifying
-a different cutoff, where the default is 49, as per RFC2822. This means
-50 is interpreted as 1950 while 49 is 2049.
+C<set_year_cutoff()> allows you to modify this behaviour by specifying
+a different cutoff.
 
 The return value is the object itself.
 
 =head2 year_cutoff
 
 Returns the current cutoff. Can be used as either a class or object method.
+
+=head2 default_cutoff
+
+Returns the default cutoff. A useful method to override for
+subclasses.
 
 =head2 fix_year
 
@@ -440,10 +496,13 @@ Dave Rolsky (DROLSKY) for kickstarting the DateTime project.
 Roderick A. Anderson for noting where the documentation was incomplete
 in places.
 
+Joshua Hoblitt (JHOBLITT) for inspiring me to check what the
+standard said about interpreting two digit years.
+
 =head1 SUPPORT
 
 Support for this module is provided via the datetime@perl.org email
-list. See http://lists.perl.org/ for more details.
+list. See L<http://datetime.perl.org/mailing_list.html> for more details.
 
 Alternatively, log them via the CPAN RT system via the web or email:
 
@@ -475,5 +534,7 @@ C<datetime@perl.org> mailing list.
 L<http://datetime.perl.org/>
 
 L<perl>, L<DateTime>
+
+RFCs 2822 and 822.
 
 =cut

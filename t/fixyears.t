@@ -1,5 +1,5 @@
 use strict;
-use Test::More tests => 20;
+use Test::More tests => 27;
 use vars qw( $class );
 BEGIN {
     $class = 'DateTime::Format::Mail';
@@ -81,4 +81,21 @@ sub run_our_tests
 	},
     );
     run_our_tests( $fn => \%testsuite );
+}
+
+# Test bad arguments
+{
+    my $parser = $class->new();
+    isa_ok( $parser => $class );
+    is( $parser->year_cutoff => 49, "Default is default." );
+    eval { $parser->set_year_cutoff( ) };
+    ok( $@, "Error with no args" );
+    eval { $parser->set_year_cutoff( 20, 40) };
+    ok( $@, "Error with two args" );
+    eval { $parser->set_year_cutoff( undef ) };
+    ok( $@, "Error with undef arg" );
+    eval { $parser->set_year_cutoff( 100 ) };
+    ok( $@, "Error with arg too big" );
+    eval { $parser->set_year_cutoff( -1 ) };
+    ok( $@, "Error with arg negative" );
 }
