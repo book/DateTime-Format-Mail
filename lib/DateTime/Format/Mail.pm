@@ -8,13 +8,13 @@ use DateTime 0.08;
 use Params::Validate qw( validate SCALAR );
 use vars qw( $VERSION );
 
-$VERSION = '0.27';
+$VERSION = '0.28';
 
 # Timezones for strict parser.
 my %timezones = qw(
-    EDT -0400	EST -0500	CDT -0500	CST -0600
-    MDT -0600	MST -0700	PDT -0700	PST -0800
-    GMT +0000	UT  +0000
+    EDT -0400   EST -0500       CDT -0500       CST -0600
+    MDT -0600   MST -0700       PDT -0700       PST -0800
+    GMT +0000   UT  +0000
 );
 my $tz_RE = join( '|', sort keys %timezones );
 $tz_RE= qr/(?:$tz_RE)/;
@@ -38,8 +38,8 @@ my $strict_RE = qr{
     (\d\d):(\d\d):(\d\d) # time
     (?:
         \s+ (
-            [+-] \d{4}	# standard form
-            | $tz_RE	# obsolete form (mostly ignored)
+            [+-] \d{4}  # standard form
+            | $tz_RE    # obsolete form (mostly ignored)
             | [A-IK-Za-ik-z]  # including military (no 'J')
             ) # time zone (optional)
     )?
@@ -49,7 +49,9 @@ my $strict_RE = qr{
 # Loose parser regex
 my $loose_RE = qr{
     ^ \s* # optional 
-    (?i: (?:Mon|Tue|Wed|Thu|Fri|Sat|Sun|[A-Z][a-z][a-z]) ,?)? # Day name + comma
+    (?i:
+        (?:Mon|Tue|Wed|Thu|Fri|Sat|Sun|[A-Z][a-z][a-z]) ,? # Day name + comma
+    )?
         # (empirically optional)
     \s*
     (\d{1,2})  # day of month
@@ -61,12 +63,12 @@ my $loose_RE = qr{
     (\d?\d):(\d?\d) (?: :(\d?\d) )? # time
     (?:
         \s+ "? (
-            [+-] \d{4}	# standard form
-            | [A-Z]+	# obsolete form (mostly ignored)
-            | GMT [+-] \d+	# empirical (converted)
-            | [A-Z]+\d+	# bizarre empirical (ignored)
-            | [a-zA-Z/]+	# linux style (ignored)
-            | [+-]{0,2} \d{3,5}	# corrupted standard form
+            [+-] \d{4}  # standard form
+            | [A-Z]+    # obsolete form (mostly ignored)
+            | GMT [+-] \d+      # empirical (converted)
+            | [A-Z]+\d+ # bizarre empirical (ignored)
+            | [a-zA-Z/]+        # linux style (ignored)
+            | [+-]{0,2} \d{3,5} # corrupted standard form
             ) "? # time zone (optional)
     )?
         (?: \s+ \([^\)]+\) )? # (friendly tz name; empirical)
@@ -92,18 +94,25 @@ sub new
 {
     my $class = shift;
     my %args = validate( @_, {
-	    loose => { type => SCALAR, default => 0 },
-	    year_cutoff => { type => SCALAR, default => $class->default_cutoff },
-	});
+            loose => {
+                type => SCALAR,
+                default => 0,
+            },
+            year_cutoff => {
+                type => SCALAR,
+                default => $class->default_cutoff,
+            },
+        }
+    );
 
     my $self = bless {}, ref($class)||$class;
     if (ref $class)
     {
-	# If called on an object, clone
-	$self->_set_parse_method( $self->_get_parse_method );
-	$self->set_year_cutoff( $self->year_cutoff );
-	# but as we have nothing to clone...
-	# and that's it. we don't store that much info per object
+        # If called on an object, clone
+        $self->_set_parse_method( $self->_get_parse_method );
+        $self->set_year_cutoff( $self->year_cutoff );
+        # but as we have nothing to clone...
+        # and that's it. we don't store that much info per object
     }
     $self->loose() if $args{loose};
     $self->set_year_cutoff( $args{year_cutoff} ) if $args{year_cutoff};
@@ -170,9 +179,10 @@ sub parse_datetime
     $when{time_zone} ||= '-0000';
 
     my %months = do { my $i = 1;
-	map { $_, $i++ } qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
+        map { $_, $i++ } qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
     };
-    $when{month} = $months{$when{month}} or croak "Invalid month [$when{month}].";
+    $when{month} = $months{$when{month}}
+        or croak "Invalid month `$when{month}'.";
 
     $when{year} = $self->fix_year( $when{year} );
     $when{time_zone} = $self->determine_timezone( $when{time_zone} );
@@ -211,7 +221,7 @@ sub set_year_cutoff
     my $self = shift;
     croak "Calling object method as class method!" unless ref $self;
     croak "Wrong number of arguments (should be 1) to set_year_cutoff"
-	unless @_ == 1;
+        unless @_ == 1;
     my $cutoff = shift;
     $self->{year_cutoff} = $cutoff;
     return $self;
@@ -274,7 +284,7 @@ DateTime::Format::Mail - Convert between DateTime and RFC2822/822 formats
     # From RFC2822 via class method:
 
     my $datetime = DateTime::Format::Mail->parse_datetime(
-	"Sat, 29 Mar 2003 22:11:18 -0800"
+        "Sat, 29 Mar 2003 22:11:18 -0800"
     );
     print $datetime->ymd('.'); # "2003.03.29"
 
@@ -282,16 +292,16 @@ DateTime::Format::Mail - Convert between DateTime and RFC2822/822 formats
     
     my $pf = DateTime::Format::Mail->new();
     print $pf->parse_datetime(
-	"Fri, 23 Nov 2001 21:57:24 -0600"
+        "Fri, 23 Nov 2001 21:57:24 -0600"
     )->ymd; # "2001-11-23"
 
     # Back to RFC2822 date
     
     use DateTime;
     my $dt = DateTime->new(
-	year => 1979, month => 7, day => 16,
-	hour => 16, minute => 45, second => 20,
-	time_zone => "Australia/Sydney"
+        year => 1979, month => 7, day => 16,
+        hour => 16, minute => 45, second => 20,
+        time_zone => "Australia/Sydney"
     );
     my $str = DateTime::Format::Mail->format_datetime( $dt );
     print $str; # "Mon, 16 Jul 1979 16:45:20 +1000"
@@ -413,7 +423,7 @@ Given a C<DateTime> object, return it as an RFC2822 compliant string.
     use DateTime;
     use DateTime::Format::Mail;
     my $dt = DateTime->new(
-	year => 1979, month => 7, day => 16, time_zone => 'UTC'
+        year => 1979, month => 7, day => 16, time_zone => 'UTC'
     );
     my $mail = DateTime::Format::Mail->format_datetime( $dt );
     print $mail, "\n"; 
