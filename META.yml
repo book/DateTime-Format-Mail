@@ -1,12 +1,24 @@
-#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
-name:         DateTime-Format-Mail
-version:      0.24
-version_from: lib/DateTime/Format/Mail.pm
-installdirs:  site
-requires:
-    Test::More:                    0.47
-    DateTime:                      0.09
-    Params::Validate:              0.58
-
+--- #YAML:1.0
+build_requires:
+  File::Find::Rule: 0.10
+  Test::More: 0.47
+conflicts: {}
 distribution_type: module
-generated_by: ExtUtils::MakeMaker version 6.10_02
+license: perl
+name: DateTime-Format-Mail
+recommends:
+  Test::Pod: 0.95
+  Test::Signature: 1.04
+requires:
+  DateTime: 0.12
+  Params::Validate: 0.59
+version: 0.25
+private:
+  directory:
+    - t
+provides:
+  DateTime::Format::Mail:
+    file: lib/DateTime/Format/Mail.pm
+    version: 0.25
+
+generated_by: docmaker version 0.89

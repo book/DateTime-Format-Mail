@@ -1,5 +1,5 @@
 This file contains message digests of all files listed in MANIFEST,
-signed via the Module::Signature module, version 0.21.
+signed via the Module::Signature module, version 0.22.
 
 To verify the content in this distribution, first make sure you have
 Module::Signature installed, then type:
@@ -17,29 +17,31 @@ Hash: SHA1
 SHA1 93ae38916e0ce2026cece7675f8fd9394d3bf1b8 AUTHORS
 SHA1 7a95fc8778fbce1f60d222e0d0d1dbb6c649461f Artistic
 SHA1 531e6b5c470d4726483fd68833391653eace0a92 COPYING
-SHA1 66192925623da7dde3e189ddab4ff1d51ba6d7ce CREDITS
-SHA1 4efb0b9122fa0a5fbcd9752fadc8a5a5d366ed89 ChangeLog
-SHA1 30893e831de3c89670f101bff4a0f1a8148b3ba8 Changes
-SHA1 658dc298f1b1caefe7f3fada4ca003f6b6298481 INSTALL
-SHA1 f08117d45b3c0900a1fe1a6f37ccfba67af0069e LICENSE
-SHA1 f91b56c71824824db4385ec81bd7381d6ba4d4fa MANIFEST
-SHA1 290e2fabdc7f445267bdd7211b2944d9c8ce7261 MANIFEST.SKIP
-SHA1 160648e15873d9e88ff690eb34edba6dc6a0eb26 META.yml
-SHA1 bd8e847678d8c5e68a0ecf8bc345a612e2d57cb0 Makefile.PL
-SHA1 e5e815a5f1133d1f811d467c96666f1cc1661507 README
-SHA1 ade34512082e6c368148f56df7dcb9b270b6e4fb lib/DateTime/Format/Mail.pm
-SHA1 a1d3e542a177056598a5f3025093784a93380b8f t/00pod.t
+SHA1 f55f9784e89b10e111c5eeea6924df21ef4d49aa CREDITS
+SHA1 da39a3ee5e6b4b0d3255bfef95601890afd80709 ChangeLog
+SHA1 144d3cec5670c6f6bce92acc240d848b62fbaf60 Changes
+SHA1 9c6e1266be17e1dbfd749d205bb8950b2882c8fa INSTALL
+SHA1 5bc64d4be40f3a06cca987e3859e95fce77d3ba4 LICENSE
+SHA1 dd27ab8838858cdcd27e1268019e4da81093633e MANIFEST
+SHA1 334ab1c6291867857d9b4a19aca94078fb9e39ac MANIFEST.SKIP
+SHA1 7eeabc7db75304cea7da11c65da6440a7b85f4e8 META.yml
+SHA1 da34906d86d0d6a6de95ef142d31329c2bad7add Makefile.PL
+SHA1 66356ef1fb5f68afdf59f211ae350ede193cb38c README
+SHA1 e1099319af9051aa14a01e34529362d63f882964 lib/DateTime/Format/Mail.pm
 SHA1 71ab8e954ba60d0d2d30f0ceab4092d68d8810ea t/00signature.t
+SHA1 a8bc052dd17b4e97bad9e84830891817cdf2abca t/99pod.t
 SHA1 7fbea03f43c26a1c0f858b3be773ba4bed857a1f t/basic.t
+SHA1 3914eae138082a0fcb10b6af7318954d742db1ca t/fixyears.t
 SHA1 cc58863a939d9c3946d7648f5ea6bb97cb45baba t/format.t
-SHA1 959b532684d29006d8172b4d0c4b4101fab77b0e t/invalid.t
+SHA1 f4b7a080793544a946f056ad078965c40c23d17a t/invalid.t
 SHA1 c04ae1e9be424831655b3e8f9bddf2ae8112548f t/parse.t
-SHA1 bc5f31fa41310a7b806ccf41052c947e986c05bd t/sample.t
+SHA1 071898f80c855a2fa99de0403366bbd0ae4f7aa9 t/sample.t
 SHA1 ebb870712a24d7eb425c63ff8a438b7f1eddabb2 t/sample_dates
+SHA1 581006dacd7967d2e8a6f87a7b5e0f0fc0020e75 t/timezones.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.2.1 (GNU/Linux)
 
-iD8DBQE+lWavzL8gm6KQWMgRAkVkAKC4fpGLg+9J0CdZ0WKTiAFy9+XLhQCguEfk
-xPUeCLlQWSZIyaNxQbNtD2U=
-=xqTv
+iD8DBQE+2/exzL8gm6KQWMgRAnXEAJ98T8FHl1FkLJmcVUVZn07Dj9FHowCcCPPm
+bmYs8TEwfCM9o423ISXhHcI=
+=e75p
 -----END PGP SIGNATURE-----
