@@ -3,8 +3,8 @@ WriteMakefile(
     NAME                => 'DateTime::Format::Mail',
     VERSION_FROM        => 'lib/DateTime/Format/Mail.pm',
     PREREQ_PM => {
-                'DateTime' => '0.1501',
-                'Params::Validate' => '0.64',
+                'DateTime' => '0.17',
+                'Params::Validate' => '0.65',
                 'Test::More' => '0.47',
             },
     ($] >= 5.005 ?

@@ -1,8 +1,6 @@
 DateTime::Format::Mail
 
-
-   Convert between DateTime and RFC2822/822 formats
-
+    Convert between DateTime and RFC2822/822 formats
 
 For installation details, see INSTALL.
 

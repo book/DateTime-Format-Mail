@@ -452,14 +452,14 @@ Alternatively, log them via the CPAN RT system via the web or email:
 This makes it much easier for me to track things and thus means
 your problem is less likely to be neglected.
 
-=head1 LICENSE AND COPYRIGHT
+=head1 LICENCE AND COPYRIGHT
 
 Copyright E<copy> Iain Truskett, 2003. All rights reserved.
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
-The full text of the licenses can be found in the F<Artistic> and
+The full text of the licences can be found in the F<Artistic> and
 F<COPYING> files included with this module, or in L<perlartistic> and
 L<perlgpl> in Perl 5.8.1 or later.
 
