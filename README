@@ -2,21 +2,16 @@ DateTime::Format::Mail
 
     Convert between DateTime and RFC2822/822 formats
 
-For installation details, see INSTALL.
+To install, run the following commands after untarring the
+distribution:
+
+  perl Build.PL
+  ./Build test
+  ./Build install
 
 For usage, see the doco. Either use perldoc or view it
 on the web at:
     <http://search.cpan.org/dist/DateTime-Format-Mail/>
 
-Changes for 0.28 (21 Oct 2003)
-   - Default cutoff is now 49, as per RFC2822.
-   - Doc shuffling and formatting tweaks.
-   - set_year_cutoff and year_cutoff stricter with
-     arguments.
-   - Cloning fixed, be it from clone() or new().
-
 
 For a complete list of changes, see the Changes file.
-
-
-by Iain Truskett.

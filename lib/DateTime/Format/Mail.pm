@@ -4,11 +4,11 @@ package DateTime::Format::Mail;
 use strict;
 use 5.005;
 use Carp;
-use DateTime 0.17;
+use DateTime 0.1705;
 use Params::Validate qw( validate validate_pos SCALAR );
 use vars qw( $VERSION );
 
-$VERSION = '0.28';
+$VERSION = '0.2801';
 
 my %validations = (
     year_cutoff =>  {
@@ -520,7 +520,7 @@ list. See L<http://datetime.perl.org/mailing_list.html> for more details.
 
 Alternatively, log them via the CPAN RT system via the web or email:
 
-    http://perl.dellah.org/rt/dtmail
+    http://rt.cpan.org/NoAuth/ReportBug.html?Queue=DateTime%3A%3AFormat%3A%3AMail
     bug-datetime-format-mail@rt.cpan.org
 
 This makes it much easier for me to track things and thus means
@@ -539,7 +539,10 @@ L<perlgpl> in Perl 5.8.1 or later.
 
 =head1 AUTHOR
 
-Iain Truskett <spoon@cpan.org>
+Originally written by Iain Truskett <spoon@cpan.org>, who died on
+December 29, 2003.
+
+Maintained by Dave Rolsky <autarch@urth.org>.
 
 =head1 SEE ALSO
 

@@ -1,9 +1,9 @@
 Artistic
 AUTHORS
+Build.PL
 Changes
 COPYING
 CREDITS
-INSTALL
 lib/DateTime/Format/Mail.pm
 LICENCE
 Makefile.PL
@@ -13,7 +13,6 @@ META.yml
 notes/rfc2822.txt
 notes/rfc822.txt
 README
-SIGNATURE
 t/00signature.t
 t/99pod.t
 t/basic.t
