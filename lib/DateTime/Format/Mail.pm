@@ -162,7 +162,8 @@ sub strict
 =head2 parse_datetime
 
 Given an RFC2822 or 822 datetime string, return a C<DateTime> object
-representing that date and time.
+representing that date and time. Unparseable strings will cause
+the method to die.
 
 See the L<synopsis|/SYNOPSIS> for examples.
 
