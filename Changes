@@ -1,6 +1,12 @@
 # Change log for DateTime::Format::Mail
 
 ---
+version: 0.26
+date:    16 Jul 2003
+changes:
+    - Uses the spiffy new Locale system.
+
+---
 version: 0.25
 date:    3 Jun 2003
 changes:

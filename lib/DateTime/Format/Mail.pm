@@ -14,7 +14,7 @@ use DateTime 0.08;
 use Params::Validate qw( validate SCALAR );
 use vars qw( $VERSION );
 
-$VERSION = '0.25';
+$VERSION = '0.26';
 
 =head1 SYNOPSIS
 
