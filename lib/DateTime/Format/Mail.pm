@@ -42,9 +42,11 @@ $timezones{UTC} = $timezones{UT};
 my $strict_RE = qr{
     ^ \s* # optional 
     # [day-of-week "," ]
-    (?:Mon|Tue|Wed|Thu|Fri|Sat|Sun) ,
+    (?:
+      (?:Mon|Tue|Wed|Thu|Fri|Sat|Sun) ,
+      \s+
+    )?
     # date => day month year
-    \s+
     (\d{1,2})  # day => 1*2DIGIT
     \s+
     (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) # month-name

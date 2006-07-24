@@ -1,6 +1,15 @@
 # Change log for DateTime::Format::Mail
 
 ---
+version: 0.30
+date;    24 Jul 2006
+changes:
+    - The strict parsing made the day name mandatory, even though
+      RFC822 and 2822 specify it as optional. Reported by Julian
+      Mehnle.
+    - Turned off signing, since it seems to be causing more trouble than it's worth.
+
+---
 version: 0.2901
 date;    24 Jan 2004
 changes:
