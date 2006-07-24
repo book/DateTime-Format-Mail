@@ -19,6 +19,7 @@ t/basic.t
 t/fixyears.t
 t/format.t
 t/invalid.t
+t/parse-strict.t
 t/parse.t
 t/sample.t
 t/sample_dates
