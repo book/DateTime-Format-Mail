@@ -16,3 +16,4 @@
 \.patch$
 ^log$
 ^data\.yaml$
+notes/.+txt

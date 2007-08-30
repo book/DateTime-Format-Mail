@@ -10,8 +10,6 @@ Makefile.PL
 MANIFEST
 MANIFEST.SKIP
 META.yml
-notes/rfc2822.txt
-notes/rfc822.txt
 README
 t/00signature.t
 t/99pod.t
