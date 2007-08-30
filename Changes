@@ -1,4 +1,12 @@
-0.30    24 Jul 2006
+0.3001  2007-08-30
+
+- No longer including RFCs in the tarball, per the request of the
+  Debian maintainer for this package. Apparently, this makes their job
+  harder, and it serves no useful purpose for me. Requested by Gunnar
+  Wolf. RT #28480.
+
+
+0.30    2006-07-24
 
 - The strict parsing made the day name mandatory, even though RFC822
   and 2822 specify it as optional. Reported by Julian Mehnle. See RT
@@ -8,7 +16,7 @@
   it's worth.
 
 
-0.2901  24 Jan 2004
+0.2901  2004-01-24
 
 - New maintainer - Dave Rolsky.
 
@@ -18,7 +26,7 @@
   don't have).
 
 
-0.29    22 Oct 2003
+0.29    2003-10-22
 
 - Corrected an error message.
 
@@ -27,7 +35,7 @@
 - Added some more method examples.
 
 
-0.28    21 Oct 2003
+0.28    2003-10-21
 
 - Default cutoff is now 49, as per RFC2822.
 
@@ -38,26 +46,26 @@
 - Cloning fixed, be it from clone() or new().
 
 
-0.27    1 Aug 2003
+0.27    2003-08-01
 
 - Made strict mode stricter.
 
 - Advertised loose mode more loudly.
 
 
-0.26    16 Jul 2003
+0.26    2003-07-16
 
 - Uses the spiffy new Locale system.
 
 
-0.25    3 Jun 2003
+0.25    2003-06-03
 
 - Backported to 5.005_03
 
 - Fixed TZ bug.
 
 
-0.24    8 Apr 2003
+0.24    2003-04-08
 
 - Minor documentation fixes.
 
@@ -70,6 +78,6 @@
 - GMT and UTC are recognised as timezone names.
 
 
-0.23    30 Mar 2003
+0.23    2003-03-30
 
 - Initial version.
