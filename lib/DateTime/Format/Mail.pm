@@ -291,7 +291,7 @@ sub format_datetime
     my $dt = $_[0]->clone;
     $dt->set( locale => 'en_US' );
 
-    my $rv = $dt->strftime( "%a, %d %b %Y %H:%M:%S %z" );
+    my $rv = $dt->strftime( "%a, %e %b %Y %H:%M:%S %z" );
     $rv =~ s/\+0000$/-0000/;
     $rv;
 }
