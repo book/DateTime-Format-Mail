@@ -211,17 +211,15 @@ sub parse_datetime
         or croak "Invalid month `$when{month}'.";
 
     $when{year} = $self->fix_year( $when{year} );
-    $when{time_zone} = $self->determine_timezone( $when{time_zone} );
+    $when{time_zone} = _determine_timezone( $when{time_zone} );
 
     my $date_time = DateTime->new( %when );
 
     return $date_time;
 }
 
-sub determine_timezone
+sub _determine_timezone
 {
-    my $self = shift;
-
     my $tz = shift;
     return '-0000' unless defined $tz; # return quickly if nothing needed
     return $tz if $tz =~ /^[+-]\d{4}$/;

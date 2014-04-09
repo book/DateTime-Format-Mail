@@ -7,7 +7,7 @@ BEGIN {
 }
 
 my $fn = sub {
-    $class->determine_timezone( @_ );
+    DateTime::Format::Mail::_determine_timezone( @_ );
 };
 
 my %testsuite = (
