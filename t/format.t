@@ -1,6 +1,6 @@
 # $Id$
 use strict;
-use Test::More tests => 7;
+use Test::More tests => 13;
 
 BEGIN {
     use_ok 'DateTime::Format::Mail';
@@ -17,6 +17,9 @@ my $class = 'DateTime::Format::Mail';
 	my $dates = shift || [
 	[ 1047278957 => '+0900' => 'Mon, 10 Mar 2003 15:49:17 +0900' ],
 	[ 1047278958 => '-0500' => 'Mon, 10 Mar 2003 01:49:18 -0500' ],
+	[ 1047192558 => '-0500' => 'Sun, 09 Mar 2003 01:49:18 -0500' ],
+	[ 1397018658 => 'Europe/Paris' => 'Wed, 09 Apr 2014 06:44:18 +0200' ],
+	[ 1397018658 => ''      => 'Wed, 09 Apr 2014 04:44:18 -0000' ],
 	[ time() => '+1000' => qr{^[A-Z][a-z][a-z],\s\d\d
 	    \s[A-Z][a-z][a-z]\s\d{4}\s\d\d:\d\d:\d\d\s[\+\-]\d{4}$}x ],
 
@@ -26,7 +29,7 @@ my $class = 'DateTime::Format::Mail';
 	{
 	    my ($epoch, $tz, $expected) = @$data;
 	    my $dt = DateTime->from_epoch( epoch => $epoch );
-	    $dt->set_time_zone( $tz );
+	    $dt->set_time_zone( $tz ) if $tz;
 	    my $back = $obj->format_datetime( $dt );
 	    if (ref $expected eq 'Regexp')
 	    {
