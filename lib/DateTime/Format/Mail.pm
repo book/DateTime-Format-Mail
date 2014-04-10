@@ -212,6 +212,7 @@ sub parse_datetime
 
     $when{year} = $self->fix_year( $when{year} );
     $when{time_zone} = _determine_timezone( $when{time_zone} );
+    $when{time_zone} = 'floating' if $when{time_zone} eq '-0000';
 
     my $date_time = DateTime->new( %when );
 
@@ -289,8 +290,8 @@ sub format_datetime
     my $dt = $_[0]->clone;
     $dt->set( locale => 'en_US' );
 
-    my $rv = $dt->strftime( "%a, %d %b %Y %H:%M:%S %z" );
-    $rv =~ s/\+0000$/-0000/;
+    my $rv = $dt->strftime( "%a, %e %b %Y %H:%M:%S %z" );
+    $rv =~ s/\+0000$/-0000/ if $dt->time_zone->is_floating;
     $rv;
 }
 
