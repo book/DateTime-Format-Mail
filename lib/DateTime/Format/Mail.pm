@@ -8,8 +8,6 @@ use DateTime 0.1705;
 use Params::Validate qw( validate validate_pos SCALAR );
 use vars qw( $VERSION );
 
-$VERSION = '0.3001';
-
 my %validations = (
     year_cutoff =>  {
         type => SCALAR,
