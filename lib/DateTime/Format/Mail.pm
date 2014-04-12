@@ -16,7 +16,7 @@ my %validations = (
         callbacks => {
             'greater than or equal to zero, less than 100' => sub {
                 defined $_[0]
-                    and $_[0] =~ /^ \d+ $/x 
+                    and $_[0] =~ /^ \d+ $/x
                     and $_[0] >= 0
                     and $_[0] < 100
             },
@@ -40,7 +40,7 @@ $timezones{UTC} = $timezones{UT};
 # XXX - need more thorough tests to ensure it's *strict*.
 
 my $strict_RE = qr{
-    ^ \s* # optional 
+    ^ \s* # optional
     # [day-of-week "," ]
     (?:
       (?:Mon|Tue|Wed|Thu|Fri|Sat|Sun) ,
@@ -68,7 +68,7 @@ my $strict_RE = qr{
 
 # Loose parser regex
 my $loose_RE = qr{
-    ^ \s* # optional 
+    ^ \s* # optional
     (?i:
         (?:Mon|Tue|Wed|Thu|Fri|Sat|Sun|[A-Z][a-z][a-z]) ,? # Day name + comma
     )?
@@ -454,7 +454,7 @@ See the L<synopsis|/SYNOPSIS> for examples.
 
 Two digit years are treated as valid in the loose translation and are
 translated up to a 19xx or 20xx figure. By default, following the
-specification of RFC2822, if the year is 
+specification of RFC2822, if the year is
 greater than '49', it's treated as being in the 20th century (19xx).
 If lower, or equal, then the 21st (20xx). That is, 50 becomes
 1950 while 49 is 2049.
@@ -497,7 +497,7 @@ Given a C<DateTime> object, return it as an RFC2822 compliant string.
         year => 1979, month => 7, day => 16, time_zone => 'UTC'
     );
     my $mail = DateTime::Format::Mail->format_datetime( $dt );
-    print $mail, "\n"; 
+    print $mail, "\n";
 
     # or via an object
     my $formatter = DateTime::Format::Mail->new();
