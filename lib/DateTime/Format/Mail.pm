@@ -504,7 +504,7 @@ Given a C<DateTime> object, return it as an RFC2822 compliant string.
     my $rfcdate = $formatter->format_datetime( $dt );
     print $rfcdate, "\n";
 
-=head1 THANKS
+=head1 THANKS FROM SPOON
 
 Dave Rolsky (DROLSKY) for kickstarting the DateTime project.
 
