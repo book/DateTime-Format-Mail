@@ -536,12 +536,14 @@ The full text of the licences can be found in the F<LICENSE> file
 included with this module, or in L<perlartistic> and
 L<perlgpl> in Perl 5.8.1 or later.
 
-=head1 AUTHOR
+=head1 AUTHORS
 
 Originally written by Iain Truskett <spoon@cpan.org>, who died on
 December 29, 2003.
 
-Maintained by Dave Rolsky <autarch@urth.org>.
+Maintained by Dave Rolsky <autarch@urth.org> from 2003 to 2013.
+
+Maintained by Philippe Bruhat (BooK) <book@cpan.org> since 2014.
 
 =head1 SEE ALSO
 
