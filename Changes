@@ -1,3 +1,22 @@
+{{$NEXT}}
+
+0.400   2014-04-13
+
+- New maintainer - Philippe Bruhat (BooK)
+
+- Now depends on DateTime 0.18. RT #74580.
+
+- Moved POD tests to the release stage.
+
+- format_datetime() now uses 1-digit numbers for day of month < 10.
+  Dates with unrecognized timezones lead to the creation of a DateTime
+  object with a floating timezone.
+  UTC is now formatted as +0000, floating is formatted as -0000.
+  RT #94556.
+
+- Now packaged using Dist::Zilla. Moved back to three-digit version numbers.
+
+
 0.3001  2007-08-30
 
 - No longer including RFCs in the tarball, per the request of the
