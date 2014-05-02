@@ -1,5 +1,13 @@
 {{$NEXT}}
 
+0.401   2014-05-03
+
+- Fix the tests to accomodate the new 1-digit format for days of month
+  before the tenth. Thanks to Dagfinn Ilmari Mannsåker for the patch.
+
+- add some more sample dates to t/sample_dates
+  and run one test per sample date in t/sample.t
+
 0.400   2014-04-13
 
 - New maintainer - Philippe Bruhat (BooK)
