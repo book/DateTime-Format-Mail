@@ -1,5 +1,11 @@
 {{$NEXT}}
 
+0.402   2015-07-06
+
+- included META.JSON (closes RT #105633, by ETHER)
+
+- added contributors list (and put back SPOON as the main author)
+
 0.401   2014-05-03
 
 - Fix the tests to accomodate the new 1-digit format for days of month
