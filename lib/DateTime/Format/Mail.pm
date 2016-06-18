@@ -4,7 +4,7 @@ package DateTime::Format::Mail;
 use strict;
 use 5.005;
 use Carp;
-use DateTime 0.1705;
+use DateTime 1.04;
 use Params::Validate qw( validate validate_pos SCALAR );
 use vars qw( $VERSION );
 
@@ -286,7 +286,7 @@ sub format_datetime
     my $self = shift;
     croak "No DateTime object specified." unless @_;
     my $dt = $_[0]->clone;
-    $dt->set( locale => 'en_US' );
+    $dt->set_locale('en_US');
 
     my $rv = $dt->strftime( "%a, %e %b %Y %H:%M:%S %z" );
     $rv =~ s/\+0000$/-0000/ if $dt->time_zone->is_floating;
