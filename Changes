@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.403   2016-06-27
+
 - Use DateTime->set_locale instead of ->set to set the locale. Using ->set may
   actually change the local time unintentionally. Patch by Dave Rolsky. GitHub
   PR #2.
